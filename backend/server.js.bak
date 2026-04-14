@@ -1,0 +1,49 @@
+// backend/server.js
+import express from "express";
+import mongoose from "mongoose";
+import cors from "cors";
+import dotenv from "dotenv";
+import uploadRoutes from "./routes/upload.js";
+import aiRoutes from "./routes/aiRoutes.js";       // <-- must match file name exactly
+import recipesRoutes from "./routes/recipes.js";
+import feedbackRoutes from "./routes/feedback.js";
+import authRoutes from "./routes/auth.js";
+
+dotenv.config();
+
+const app = express();
+app.use(cors());
+app.use(express.json());
+
+// Connect MongoDB (will log any connection errors)
+mongoose
+  .connect(process.env.MONGO_URI, { dbName: "recipesDB" })
+  .then(() => console.log("✅ Connected to MongoDB"))
+  .catch((err) => console.error("❌ MongoDB connection error:", err));
+
+/**
+ * Mount routes — order doesn't matter much but keep consistent
+ * final endpoints:
+ *  - /api/recipes...
+ *  - /api/feedback...
+ *  - /api/auth...
+ *  - /api/ai...
+ *  - /api/upload...
+ */
+app.use("/api/recipes", recipesRoutes);
+app.use("/api/feedback", feedbackRoutes);
+app.use("/api/auth", authRoutes);
+app.use("/api/ai", aiRoutes);                 // <-- ensures POST /api/ai/ask resolves
+app.use("/uploads", express.static("uploads"));
+app.use("/api/upload", uploadRoutes);
+
+// simple root health route
+app.get("/", (req, res) => res.send("Backend running"));
+
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`✅ Server running on port ${PORT}`);
+});
+
+export default app;
+

@@ -1,0 +1,22 @@
+{
+  "name": "recipe-app",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "vercel-build": "cd frontend && npm install && npm run build",
+    "dev:backend": "cd backend && npm run dev",
+    "dev:frontend": "cd frontend && npm start"
+  },
+  "dependencies": {
+    "serverless-http": "^4.0.0",
+    "express": "^5.2.1",
+    "mongoose": "^8.22.1",
+    "cors": "^2.8.6",
+    "dotenv": "^17.2.4",
+    "bcryptjs": "^3.0.3",
+    "jsonwebtoken": "^9.0.3",
+    "multer": "^2.0.2",
+    "node-fetch": "^3.3.2",
+    "validator": "^13.15.26"
+  }
+}
